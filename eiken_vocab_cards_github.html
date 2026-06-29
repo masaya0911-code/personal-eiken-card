@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="1級カード">
+<title>MY 英検1級 CARDS</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+:root{
+  --paper: #EDEAE1;
+  --paper-deep: #E3DFD3;
+  --paper-card: #F4F1E8;
+  --ink: #20242E;
+  --ink-soft: #5B5F68;
+  --ink-faint: #8C8E89;
+  --akapen: #C0392B;
+  --akapen-soft: #E9D4D0;
+  --hanko: #3F6B4F;
+  --hanko-soft: #DCE3D6;
+  --brass: #A8854D;
+  --brass-soft: #ECE2CC;
+  --rule: #CFC9B8;
+  --shadow: rgba(32,36,46,0.16);
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+*{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body{ margin:0; }
+
+.vc-app{
+  background: var(--paper);
+  min-height: 100vh;
+  color: var(--ink);
+  padding: 18px 14px 90px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* ---------- HEADER ---------- */
+.vc-header{
+  width:100%;
+  max-width: 420px;
+  margin-bottom: 18px;
+}
+.vc-title{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  margin: 0 0 6px;
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+}
+.vc-title b{ color: var(--ink); font-weight:600; }
+.vc-stats{
+  display:flex;
+  gap:14px;
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink-soft);
+  border-top: 1px solid var(--rule);
+  padding-top: 8px;
+}
+.vc-stats strong{ color: var(--ink); font-weight:600; }
+
+/* ---------- TABS ---------- */
+.vc-tabs{
+  width:100%;
+  max-width: 420px;
+  display:flex;
+  background: var(--paper-deep);
+  border-radius: 10px;
+  padding: 3px;
+  margin-bottom: 20px;
+  gap: 2px;
+}
+.vc-tab{
+  flex:1;
+  text-align:center;
+  padding: 9px 4px;
+  font-size: 13px;
+  font-weight:600;
+  color: var(--ink-soft);
+  border-radius: 8px;
+  cursor:pointer;
+  border:none;
+  background:transparent;
+  font-family:'Inter',sans-serif;
+}
+.vc-tab.active{
+  background: var(--paper-card);
+  color: var(--ink);
+  box-shadow: 0 1px 3px var(--shadow);
+}
+
+.vc-view{
+  width:100%;
+  max-width: 420px;
+}
+
+/* ---------- FLASHCARD ---------- */
+.vc-card-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.vc-card{
+  position:relative;
+  width:100%;
+  aspect-ratio: 5/6.4;
+  background: var(--paper-card);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px var(--shadow), 0 1px 0 rgba(255,255,255,0.4) inset;
+  padding: 26px 22px;
+  display:flex;
+  flex-direction:column;
+  cursor:pointer;
+  user-select:none;
+  border: 1px solid rgba(32,36,46,0.06);
+}
+.vc-punch{
+  position:absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--rule), inset 0 2px 3px rgba(32,36,46,0.15);
+}
+.vc-tag-chip{
+  align-self:flex-end;
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--brass-soft);
+  border: 1px solid var(--brass);
+  padding: 3px 9px;
+  border-radius: 100px;
+  margin-bottom: 14px;
+}
+.vc-card-body{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding: 0 8px;
+  gap: 14px;
+}
+.vc-word{
+  font-family:'Source Serif 4', serif;
+  font-weight:600;
+  font-size: 34px;
+  line-height: 1.15;
+  color: var(--ink);
+  word-break: break-word;
+}
+.vc-hint{
+  font-size: 13px;
+  color: var(--ink-faint);
+  font-family:'IBM Plex Mono', monospace;
+}
+.vc-divider{
+  width: 36px;
+  height: 1px;
+  background: var(--rule);
+  margin: 2px 0;
+}
+.vc-translation{
+  font-family:'Source Serif 4', serif;
+  font-weight:600;
+  font-size: 24px;
+  color: var(--ink);
+}
+.vc-example{
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.vc-example mark{
+  background: none;
+  color: var(--akapen);
+  font-weight:600;
+  text-decoration: underline;
+  text-decoration-color: var(--akapen-soft);
+  text-decoration-thickness: 2px;
+}
+.vc-card-footer{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  margin-top: 10px;
+}
+.vc-meta{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.vc-actions{
+  display:flex;
+  gap: 10px;
+  width:100%;
+  margin-top: 16px;
+}
+.vc-btn{
+  flex:1;
+  padding: 14px 0;
+  border-radius: 12px;
+  border: none;
+  font-weight:600;
+  font-size: 15px;
+  cursor:pointer;
+  font-family:'Inter',sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 6px;
+}
+.vc-btn-wrong{
+  background: var(--akapen-soft);
+  color: var(--akapen);
+  border: 1.5px solid var(--akapen);
+}
+.vc-btn-right{
+  background: var(--hanko);
+  color: #fff;
+}
+.vc-skip{
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--ink-faint);
+  text-decoration: underline;
+  text-align:center;
+  cursor:pointer;
+  background:none;
+  border:none;
+  font-family:'Inter',sans-serif;
+}
+.vc-empty{
+  text-align:center;
+  padding: 60px 20px;
+  color: var(--ink-soft);
+}
+.vc-empty .vc-word{ font-size:20px; }
+
+/* ---------- FORM (ADD) ---------- */
+.vc-form{
+  background: var(--paper-card);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 4px 16px var(--shadow);
+}
+.vc-field{ margin-bottom: 16px; }
+.vc-label{
+  display:block;
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.vc-input, .vc-textarea{
+  width:100%;
+  border: 1.5px solid var(--rule);
+  background: var(--paper);
+  border-radius: 8px;
+  padding: 11px 12px;
+  font-size: 15px;
+  font-family:'Inter',sans-serif;
+  color: var(--ink);
+}
+.vc-input:focus, .vc-textarea:focus{
+  outline:none;
+  border-color: var(--brass);
+}
+.vc-textarea{ resize: vertical; min-height: 70px; line-height:1.5; }
+.vc-save-btn{
+  width:100%;
+  padding: 14px 0;
+  background: var(--ink);
+  color: var(--paper);
+  border:none;
+  border-radius: 10px;
+  font-weight:600;
+  font-size: 15px;
+  cursor:pointer;
+  font-family:'Inter',sans-serif;
+}
+.vc-form-msg{
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--hanko);
+  font-family:'IBM Plex Mono', monospace;
+  min-height: 16px;
+}
+
+/* ---------- LIST ---------- */
+.vc-search{
+  width:100%;
+  margin-bottom: 12px;
+}
+.vc-list-row{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--rule);
+}
+.vc-list-main{ flex:1; min-width:0; }
+.vc-list-word{
+  font-family:'Source Serif 4', serif;
+  font-weight:600;
+  font-size: 17px;
+  color: var(--ink);
+}
+.vc-list-trans{
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+.vc-list-side{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:4px;
+}
+.vc-mini-tag{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-soft);
+  background: var(--brass-soft);
+  padding: 2px 7px;
+  border-radius: 100px;
+}
+.vc-list-score{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+.vc-del{
+  background:none;
+  border:none;
+  color: var(--akapen);
+  font-size: 18px;
+  cursor:pointer;
+  padding: 4px 6px;
+  line-height:1;
+}
+.vc-list-empty{
+  text-align:center;
+  padding: 50px 10px;
+  color: var(--ink-faint);
+  font-size: 14px;
+}
+
+/* ---------- IMPORT ---------- */
+.vc-import-note{
+  background: var(--brass-soft);
+  border: 1px solid var(--brass);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.vc-import-note code{
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 12px;
+  background: rgba(255,255,255,0.5);
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+.vc-import-textarea{
+  width:100%;
+  min-height: 160px;
+  border: 1.5px solid var(--rule);
+  background: var(--paper-card);
+  border-radius: 10px;
+  padding: 12px;
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.vc-import-textarea:focus{ outline:none; border-color: var(--brass); }
+
+.vc-loading{
+  text-align:center;
+  padding: 80px 20px;
+  color: var(--ink-faint);
+  font-family:'IBM Plex Mono', monospace;
+  font-size: 13px;
+}
+</style>
+</head>
+<body>
+<div id="root" class="vc-app"><div class="vc-loading">読み込み中 …</div></div>
+
+<script>
+const STORE_KEY = 'vocab-cards';
+let cards = [];
+let activeTab = 'study';
+let currentCardId = null;
+let flipped = false;
+let searchQuery = '';
+let importMsg = '';
+let formMsg = '';
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function genId(){
+  return Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,7);
+}
+
+async function loadCards(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    cards = raw ? JSON.parse(raw) : [];
+  }catch(e){
+    cards = [];
+  }
+}
+
+async function saveCards(){
+  try{
+    localStorage.setItem(STORE_KEY, JSON.stringify(cards));
+  }catch(e){
+    console.error('save failed', e);
+  }
+}
+
+function pickRandomCard(){
+  if(cards.length === 0) return null;
+  if(cards.length === 1) return cards[0];
+  let pool = cards.filter(c => c.id !== currentCardId);
+  if(pool.length === 0) pool = cards;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+function nextCard(){
+  const c = pickRandomCard();
+  currentCardId = c ? c.id : null;
+  flipped = false;
+  render();
+}
+
+function highlightExample(example, word){
+  if(!example) return '';
+  try{
+    const esc = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp('(' + esc + ')', 'ig');
+    return escapeHtml(example).replace(re, '<mark>$1</mark>');
+  }catch(e){
+    return escapeHtml(example);
+  }
+}
+
+function setTab(tab){
+  activeTab = tab;
+  formMsg = '';
+  importMsg = '';
+  if(tab === 'study' && !currentCardId){
+    nextCard();
+    return;
+  }
+  render();
+}
+
+async function markCard(id, wasCorrect){
+  const card = cards.find(c => c.id === id);
+  if(card){
+    if(!card.stats) card.stats = {correct:0, wrong:0};
+    if(wasCorrect) card.stats.correct++; else card.stats.wrong++;
+    await saveCards();
+  }
+  nextCard();
+}
+
+async function deleteCard(id){
+  cards = cards.filter(c => c.id !== id);
+  await saveCards();
+  render();
+}
+
+async function handleAddSubmit(e){
+  e.preventDefault();
+  const word = document.getElementById('f-word').value.trim();
+  const translation = document.getElementById('f-translation').value.trim();
+  const example = document.getElementById('f-example').value.trim();
+  const tag = document.getElementById('f-tag').value.trim();
+  if(!word || !translation){
+    formMsg = 'word_err';
+    render();
+    return;
+  }
+  const dup = cards.some(c => c.word.toLowerCase() === word.toLowerCase());
+  if(dup){
+    formMsg = 'dup_err';
+    render();
+    return;
+  }
+  cards.push({
+    id: genId(),
+    word, translation, example, tag,
+    createdAt: new Date().toISOString(),
+    stats: {correct:0, wrong:0}
+  });
+  await saveCards();
+  formMsg = 'ok';
+  render();
+  setTimeout(() => {
+    const w = document.getElementById('f-word');
+    if(w) w.focus();
+  }, 50);
+}
+
+async function handleImport(){
+  const ta = document.getElementById('import-text');
+  const lines = ta.value.split('\n').map(l => l.trim()).filter(Boolean);
+  let added = 0, skipped = 0;
+  for(const line of lines){
+    const parts = line.split('|').map(p => p.trim());
+    if(parts.length < 2 || !parts[0] || !parts[1]){ skipped++; continue; }
+    const [word, translation, example='', tag=''] = parts;
+    const dup = cards.some(c => c.word.toLowerCase() === word.toLowerCase());
+    if(dup){ skipped++; continue; }
+    cards.push({
+      id: genId(), word, translation, example, tag,
+      createdAt: new Date().toISOString(),
+      stats: {correct:0, wrong:0}
+    });
+    added++;
+  }
+  if(added > 0) await saveCards();
+  importMsg = added + '件追加、' + skipped + '件スキップ（重複または形式不正）';
+  ta.value = '';
+  render();
+}
+
+function totalStats(){
+  let correct = 0, wrong = 0;
+  cards.forEach(c => {
+    if(c.stats){ correct += c.stats.correct||0; wrong += c.stats.wrong||0; }
+  });
+  const total = correct + wrong;
+  const rate = total > 0 ? Math.round((correct/total)*100) : null;
+  return { count: cards.length, rate };
+}
+
+function renderHeader(){
+  const s = totalStats();
+  return `
+    <div class="vc-header">
+      <div class="vc-title">MY <b>英検1級</b> CARDS</div>
+      <div class="vc-stats">
+        <span>登録 <strong>${s.count}</strong> 枚</span>
+        <span>正答率 <strong>${s.rate === null ? '—' : s.rate + '%'}</strong></span>
+      </div>
+    </div>
+    <div class="vc-tabs">
+      <button class="vc-tab ${activeTab==='study'?'active':''}" data-tab="study">学習</button>
+      <button class="vc-tab ${activeTab==='add'?'active':''}" data-tab="add">追加</button>
+      <button class="vc-tab ${activeTab==='list'?'active':''}" data-tab="list">一覧</button>
+      <button class="vc-tab ${activeTab==='import'?'active':''}" data-tab="import">読み込み</button>
+    </div>
+  `;
+}
+
+function renderStudy(){
+  if(cards.length === 0){
+    return `<div class="vc-empty">
+      <div class="vc-word">カードがありません</div>
+      <div class="vc-hint" style="margin-top:10px;">「追加」または「読み込み」から単語を登録してください</div>
+    </div>`;
+  }
+  const card = cards.find(c => c.id === currentCardId) || cards[0];
+  const tagHtml = card.tag ? `<div class="vc-tag-chip">${escapeHtml(card.tag)}</div>` : '<div></div>';
+
+  let body;
+  if(!flipped){
+    body = `
+      <div class="vc-card-body">
+        <div class="vc-word">${escapeHtml(card.word)}</div>
+        <div class="vc-hint">タップして意味を見る</div>
+      </div>
+    `;
+  }else{
+    body = `
+      <div class="vc-card-body">
+        <div class="vc-translation">${escapeHtml(card.translation)}</div>
+        ${card.example ? `<div class="vc-divider"></div><div class="vc-example">${highlightExample(card.example, card.word)}</div>` : ''}
+      </div>
+    `;
+  }
+
+  return `
+    <div class="vc-card-wrap">
+      <div class="vc-card" id="flip-card">
+        ${tagHtml}
+        ${body}
+        <div class="vc-card-footer">
+          <span class="vc-meta">${flipped ? '裏面' : '表面'}</span>
+          <span class="vc-meta">残り ${cards.length} 枚中ランダム</span>
+        </div>
+      </div>
+      ${flipped ? `
+        <div class="vc-actions">
+          <button class="vc-btn vc-btn-wrong" id="btn-wrong">✕ もう一度</button>
+          <button class="vc-btn vc-btn-right" id="btn-right">○ 覚えた</button>
+        </div>
+      ` : `<button class="vc-skip" id="btn-skip">この単語をスキップ</button>`}
+    </div>
+  `;
+}
+
+function renderAdd(){
+  let msgHtml = '';
+  if(formMsg === 'ok') msgHtml = '保存しました ✓';
+  else if(formMsg === 'word_err') msgHtml = '<span style="color:var(--akapen)">単語と訳は必須です</span>';
+  else if(formMsg === 'dup_err') msgHtml = '<span style="color:var(--akapen)">同じ単語が既に登録されています</span>';
+
+  return `
+    <form class="vc-form" id="add-form">
+      <div class="vc-field">
+        <label class="vc-label">単語</label>
+        <input class="vc-input" id="f-word" type="text" placeholder="e.g. ubiquitous" autocomplete="off">
+      </div>
+      <div class="vc-field">
+        <label class="vc-label">訳</label>
+        <input class="vc-input" id="f-translation" type="text" placeholder="e.g. あらゆる所に存在する" autocomplete="off">
+      </div>
+      <div class="vc-field">
+        <label class="vc-label">例文（任意）</label>
+        <textarea class="vc-textarea" id="f-example" placeholder="e.g. Smartphones have become ubiquitous in modern society."></textarea>
+      </div>
+      <div class="vc-field">
+        <label class="vc-label">タグ（任意）</label>
+        <input class="vc-input" id="f-tag" type="text" placeholder="e.g. 大問5 / Writing添削 / 過去問" autocomplete="off">
+      </div>
+      <button type="submit" class="vc-save-btn">保存する</button>
+      <div class="vc-form-msg">${msgHtml}</div>
+    </form>
+  `;
+}
+
+function renderList(){
+  const q = searchQuery.trim().toLowerCase();
+  const filtered = q
+    ? cards.filter(c => c.word.toLowerCase().includes(q) || c.translation.toLowerCase().includes(q) || (c.tag||'').toLowerCase().includes(q))
+    : cards;
+  const sorted = [...filtered].sort((a,b) => (b.createdAt||'').localeCompare(a.createdAt||''));
+
+  const rows = sorted.map(c => {
+    const stats = c.stats || {correct:0, wrong:0};
+    return `
+      <div class="vc-list-row">
+        <div class="vc-list-main">
+          <div class="vc-list-word">${escapeHtml(c.word)}</div>
+          <div class="vc-list-trans">${escapeHtml(c.translation)}</div>
+        </div>
+        <div class="vc-list-side">
+          ${c.tag ? `<div class="vc-mini-tag">${escapeHtml(c.tag)}</div>` : ''}
+          <div class="vc-list-score">○${stats.correct} ✕${stats.wrong}</div>
+        </div>
+        <button class="vc-del" data-del="${c.id}" aria-label="削除">×</button>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <input class="vc-input vc-search" id="search-input" type="text" placeholder="単語・訳・タグで検索" value="${escapeHtml(searchQuery)}">
+    ${sorted.length ? rows : '<div class="vc-list-empty">該当するカードがありません</div>'}
+  `;
+}
+
+function renderImport(){
+  return `
+    <div class="vc-import-note">
+      1行＝1カード。<code>単語 | 訳 | 例文 | タグ</code> の形式でパイプ区切り（例文とタグは省略可）。<br>
+      Claudeとの会話で「この単語をカード形式で出して」と頼んで、出てきたテキストをそのまま貼り付けられます。
+    </div>
+    <textarea class="vc-import-textarea" id="import-text" placeholder="ubiquitous | あらゆる所に存在する | Smartphones have become ubiquitous in modern society. | 大問5
+meticulous | 細心の、几帳面な | She was meticulous in her research."></textarea>
+    <button class="vc-save-btn" id="btn-import">読み込む</button>
+    <div class="vc-form-msg">${importMsg}</div>
+  `;
+}
+
+function render(){
+  const root = document.getElementById('root');
+  let viewHtml = '';
+  if(activeTab === 'study') viewHtml = renderStudy();
+  else if(activeTab === 'add') viewHtml = renderAdd();
+  else if(activeTab === 'list') viewHtml = renderList();
+  else if(activeTab === 'import') viewHtml = renderImport();
+
+  root.innerHTML = renderHeader() + `<div class="vc-view">${viewHtml}</div>`;
+  attachEvents();
+}
+
+function attachEvents(){
+  document.querySelectorAll('.vc-tab').forEach(el => {
+    el.addEventListener('click', () => setTab(el.dataset.tab));
+  });
+
+  if(activeTab === 'study'){
+    const flipEl = document.getElementById('flip-card');
+    if(flipEl) flipEl.addEventListener('click', () => { flipped = !flipped; render(); });
+    const skipBtn = document.getElementById('btn-skip');
+    if(skipBtn) skipBtn.addEventListener('click', (e) => { e.stopPropagation(); nextCard(); });
+    const wrongBtn = document.getElementById('btn-wrong');
+    if(wrongBtn) wrongBtn.addEventListener('click', (e) => { e.stopPropagation(); markCard(currentCardId, false); });
+    const rightBtn = document.getElementById('btn-right');
+    if(rightBtn) rightBtn.addEventListener('click', (e) => { e.stopPropagation(); markCard(currentCardId, true); });
+  }
+
+  if(activeTab === 'add'){
+    const form = document.getElementById('add-form');
+    if(form) form.addEventListener('submit', handleAddSubmit);
+  }
+
+  if(activeTab === 'list'){
+    const search = document.getElementById('search-input');
+    if(search){
+      search.addEventListener('input', (e) => { searchQuery = e.target.value; render();
+        setTimeout(() => { const s = document.getElementById('search-input'); if(s){ s.focus(); s.selectionStart = s.selectionEnd = s.value.length; } }, 0);
+      });
+    }
+    document.querySelectorAll('[data-del]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(confirm('このカードを削除しますか？')) deleteCard(btn.dataset.del);
+      });
+    });
+  }
+
+  if(activeTab === 'import'){
+    const btn = document.getElementById('btn-import');
+    if(btn) btn.addEventListener('click', handleImport);
+  }
+}
+
+(async function init(){
+  await loadCards();
+  if(cards.length > 0) currentCardId = pickRandomCard().id;
+  render();
+})();
+</script>
+</body>
+</html>
